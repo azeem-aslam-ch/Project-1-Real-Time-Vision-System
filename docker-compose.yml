@@ -1,0 +1,57 @@
+# version: "3.9" (obsolete)
+
+services:
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+
+  api_service:
+    build:
+      context: .
+      dockerfile: api_service/Dockerfile
+    environment:
+      - APP_STORAGE_REDIS_URL=redis://redis:6379/0
+      - APP_API_API_KEY=dev-key-123
+      - PYTHONPATH=/app
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+    volumes:
+      - ./config:/app/config
+
+  inference_service:
+    build:
+      context: .
+      dockerfile: inference_service/Dockerfile
+    environment:
+      - APP_STORAGE_REDIS_URL=redis://redis:6379/0
+      - PYTHONPATH=/app
+    env_file:
+      - .env
+    # Enable GPU if available
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: 1
+    #           capabilities: [gpu]
+    depends_on:
+      - redis
+    volumes:
+      - ./config:/app/config
+      - ./data:/app/data
+      - ./models:/app/models
+
+  streamlit_ui:
+    build:
+      context: .
+      dockerfile: streamlit_ui/Dockerfile
+    ports:
+      - "8501:8501"
+    depends_on:
+      - api_service

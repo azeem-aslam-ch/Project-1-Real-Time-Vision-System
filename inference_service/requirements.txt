@@ -1,0 +1,8 @@
+ultralytics
+opencv-python-headless
+redis
+shapely
+pyyaml
+torch --index-url https://download.pytorch.org/whl/cpu
+numpy
+lap

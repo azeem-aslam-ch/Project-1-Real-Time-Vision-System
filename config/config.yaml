@@ -1,0 +1,40 @@
+# System Configuration
+
+api:
+  host: "0.0.0.0"
+  port: 8000
+  api_key: "dev-key-123"
+  rate_limit: "10/minute"
+
+inference:
+  model_path: "yolov8n.pt" # yolov8n.pt, yolov8s.pt, etc.
+  device: "cuda" # cuda, cpu
+  confidence_threshold: 0.4
+  input_source: "0" # "0" for webcam, "path/to/video.mp4", or "rtsp://..."
+  resize_width: 640
+  fps_throttle: 30
+  frame_drop_threshold: 5
+
+tracking:
+  tracker_type: "bytetrack" # bytetrack, botsort
+
+events:
+  cooldown_seconds: 5
+  line_crossing:
+    enabled: true
+    lines:
+      - id: "main_entrance"
+        coords: [[100, 300], [500, 300]] # [[x1, y1], [x2, y2]]
+  roi_intrusion:
+    enabled: true
+    zones:
+      - id: "restricted_area"
+        coords: [[100, 100], [300, 100], [300, 300], [100, 300]]
+
+storage:
+  redis_url: "redis://localhost:6379/0"
+  sqlite_path: "data/events.db"
+
+logging:
+  level: "INFO"
+  format: "json"
