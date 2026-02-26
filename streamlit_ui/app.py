@@ -4,11 +4,13 @@ import time
 import pandas as pd
 from PIL import Image
 import io
+import os
 
 # Setup Configuration
-API_URL = "http://api_service:8000"  # Internal Docker URL
-EXTERNAL_API_URL = "http://localhost:8000"  # Browser-accessible URL
-API_KEY = "dev-key-123"
+# For local Docker: http://api_service:8000
+# For cloud: link to your public backend URL
+API_URL = os.environ.get("API_URL", "http://api_service:8000")
+API_KEY = os.environ.get("API_KEY", "dev-key-123")
 
 st.set_page_config(page_title="Vision Platform Dashboard", layout="wide")
 
